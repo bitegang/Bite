@@ -1,0 +1,3 @@
+//ACTION TYPES 
+
+export const SET_ACTIVE_PHOTO= "SET_ACTIVE_PHOTO"; 
