@@ -11,7 +11,7 @@ import * as firebase from "firebase";
 import Images from "./src/Utility/Components/Images"; 
 import {watchPhotosData} from "./src/Redux/Actions"
 import {Container, Content, Header, Form, Input, Item, Button, Label, Spinner} from 'native-base'
-
+import { connect } from 'react-redux';
 // Initialize Firebase
  
 var config = {
@@ -32,6 +32,9 @@ firestore.settings(settings);
 require("firebase/firestore");
 
 // create a component
+
+ 
+
 class MyClass extends Component {
 
   constructor(props){ 
@@ -43,38 +46,23 @@ class MyClass extends Component {
 
   componentDidMount(){ 
 
-    this.loadImages(); 
-  }
+    watchPhotosData()
+      .then(() => { 
 
-  loadImages = () => { 
-    
-    var db = firebase.firestore(); 
-     
-    db.collection("Images").get()
-      .then(snapshot => {
-        var images = []; 
-        snapshot.forEach(doc => {
-          
-          images.push(doc.data().link);
-        });
-
-        return images; 
-      })
-      .then((images) => { 
-
-        this.setState({images: images, loading: false}); 
+        this.setState({loading: false})
       })
       .catch(error => { 
-        console.log(error);
+
+        console.log(error); 
       })
-
-
+    
   }
 
   render() {
 
-    const {images, loading} = this.state
+    
      
+    const {loading, images} = this.state; 
     
 
     var startingScreen;
@@ -86,7 +74,8 @@ class MyClass extends Component {
     }
 
     else { 
-
+      // console.log(store.getState());
+      // const images = store.getState().Images; 
       const imageRows = (images.map((link, index) => (
            
         <Swiper 
@@ -189,3 +178,4 @@ const styles = StyleSheet.create({
 
 //make this component available to the app
 export default MyClass;
+ 

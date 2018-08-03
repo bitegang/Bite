@@ -1,9 +1,40 @@
-function setActivePhoto (imageURL){ 
+import thunkMiddleware from 'redux-thunk';
+import { store } from "./../Store"
+const firebase = require("firebase");
+require("firebase/firestore");
+
+
+
+function retrievePhotos (images){ 
     return { 
-        type: "SET_ACTIVE_PHOTO", 
-        value: imageUrl,  
+        type: "FETCH_IMAGES", 
+        payload: images,  
 
     }; 
 }; 
 
-export {setActivePhoto}
+function watchPhotosData(){
+
+
+    var db = firebase.firestore(); 
+        
+    return db.collection("Images").get()
+        .then(snapshot => {
+            var images = []; 
+            snapshot.forEach(doc => {
+                
+                images.push(doc.data().link);
+            });
+
+            return images; 
+        })
+        .then((images) => { 
+
+            store.dispatch(retrievePhotos(images));
+        })
+        .catch(error => { 
+            console.log(error); 
+        }) 
+}
+
+export {retrievePhotos, watchPhotosData}
