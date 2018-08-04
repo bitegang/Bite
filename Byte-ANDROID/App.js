@@ -11,6 +11,8 @@ import * as firebase from "firebase";
 import Images from "./src/Utility/Components/Images"; 
 import {watchPhotosData} from "./src/Redux/Actions"
 import {Container, Content, Header, Form, Input, Item, Button, Label, Spinner} from 'native-base'
+import _ from "lodash"; 
+
 
 // Initialize Firebase
  
@@ -50,19 +52,16 @@ class MyClass extends Component {
     
     var db = firebase.firestore(); 
      
-    db.collection("Images").get()
-      .then(snapshot => {
-        var images = []; 
-        snapshot.forEach(doc => {
-          
-          images.push(doc.data().link);
-        });
-
-        return images; 
+    
+        
+    watchPhotosData()
+      .then( () => { 
+        
+        console.log(store.getState()); 
       })
-      .then((images) => { 
+      .then(() => { 
 
-        this.setState({images: images, loading: false}); 
+        this.setState({loading: false}); 
       })
       .catch(error => { 
         console.log(error);
@@ -73,10 +72,8 @@ class MyClass extends Component {
 
   render() {
 
-    const {images, loading} = this.state
-     
+    const {loading} = this.state
     
-
     var startingScreen;
 
     if (loading) { 
@@ -87,8 +84,9 @@ class MyClass extends Component {
 
     else { 
 
-      const imageRows = (images.map((link, index) => (
-           
+      const images = store.getState().images; 
+      const imageRows = (_.values(images).map((link, index) => (
+        
         <Swiper 
           loop = {false} 
           showsPagination = {false} 
