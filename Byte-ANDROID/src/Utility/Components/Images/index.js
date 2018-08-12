@@ -12,8 +12,9 @@ import {
 import {watchPhotosData} from "./../../../Redux/Actions"
 import { store } from './../../../Redux/Store';
 import * as firebase from "firebase"; 
-import {Container, Content, Header, Form, Input, Item, Button, Label, Spinner} from 'native-base';
+import {Container, Content, Header, Spinner} from 'native-base';
 require("firebase/firestore");
+
 
 
 
@@ -50,14 +51,14 @@ class Images extends Component {
 
     retrieveStoredPhotoLink = () => { 
 
-        const {imageLink} = this.props; 
+        const {image} = this.props; 
         var storage = firebase.storage();
         
         var pathReference = storage.ref('Images');
 
         console.log("papi");
     
-        pathReference.child(imageLink).getDownloadURL()
+        pathReference.child(image.storageName).getDownloadURL()
             .then(url => {
                 
                 console.log("function to get storage Links", url); 
@@ -129,7 +130,14 @@ class Images extends Component {
                         justifyContent: 'center',
                     }}
                 >
+               
+                
                 </View>
+
+                
+
+
+
             </View>
         );
     }

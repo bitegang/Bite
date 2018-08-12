@@ -22,9 +22,9 @@ function watchPhotosData(){
         .then(snapshot => {
             var images = []; 
             snapshot.forEach(doc => {
+
                  
-                 
-                images.push(doc.data().storageName);
+                images.push(doc.data());
             });
         
 
