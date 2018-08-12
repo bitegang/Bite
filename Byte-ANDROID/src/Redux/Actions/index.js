@@ -16,15 +16,17 @@ function retrievePhotos (images){
 function watchPhotosData(){
 
 
-    var db = firebase.firestore(); 
+    var db = firebase.firestore();
         
     return db.collection("Images").get()
         .then(snapshot => {
             var images = []; 
             snapshot.forEach(doc => {
-                
-                images.push(doc.data().link);
+                 
+                 
+                images.push(doc.data().storageName);
             });
+        
 
             return images; 
         })

@@ -27,6 +27,8 @@ var config = {
 firebase.initializeApp(config);
 
 const firestore = firebase.firestore();
+var storage = firebase.storage();
+
 const settings = {
   timestampsInSnapshots: true, 
 }
@@ -51,8 +53,7 @@ class MyClass extends Component {
   loadImages = () => { 
     
     var db = firebase.firestore(); 
-     
-    
+   
         
     watchPhotosData()
       .then( () => { 
@@ -67,6 +68,7 @@ class MyClass extends Component {
         console.log(error);
       })
 
+    
 
   }
 
@@ -113,9 +115,7 @@ class MyClass extends Component {
 
       startingScreen = ( 
         <View>     
-          <View style = {styles.slideDefault}> 
-            <Text style = {styles.text} > Search </Text>
-          </View>
+        
           <View style={[styles.container, styles.horizontal]}> 
             
             <Swiper loop = {false} showsPagination = {false} index = {0}> 

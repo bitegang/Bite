@@ -12,6 +12,7 @@ import {
 import {watchPhotosData} from "./../../../Redux/Actions"
 import { store } from './../../../Redux/Store';
 import * as firebase from "firebase"; 
+import {Container, Content, Header, Form, Input, Item, Button, Label, Spinner} from 'native-base';
 require("firebase/firestore");
 
 
@@ -37,18 +38,70 @@ class Images extends Component {
     constructor(props){ 
 
         super(props); 
-        
+        this.state = {loading: true, imageLink: ""}; 
     }
 
     componentDidMount(){ 
-         
+
+       this.retrieveStoredPhotoLink();
+        
+       
     }
+
+    retrieveStoredPhotoLink = () => { 
+
+        const {imageLink} = this.props; 
+        var storage = firebase.storage();
+        
+        var pathReference = storage.ref('Images');
+
+        console.log("papi");
+    
+        pathReference.child(imageLink).getDownloadURL()
+            .then(url => {
+                
+                console.log("function to get storage Links", url); 
+                this.setState({imageLink: url, loading: false}); 
+    
+    
+            }).catch(function(error) {
+                console.log(error);
+                // Handle any errors
+            });
+    }
+
+
 
     render() {
 
-        const {imageLink} = this.props;
-        console.log(imageLink);  
+        const {loading, imageLink} = this.state; 
         const resizeMode = 'cover';
+        var display; 
+
+        if (loading){ 
+
+            display = ( 
+
+                <Spinner color = "red" style = {styles.spinner}/>
+
+            )
+
+        }
+
+        else { 
+            console.log("Hello", imageLink);
+            display = (
+                
+                <Image
+                    style={{
+                    flex: 1,
+                    resizeMode,
+                    }}
+                    source={{ uri : imageLink}}
+                />
+            )
+        }
+        
         
         return (
             <View
@@ -66,13 +119,7 @@ class Images extends Component {
                         height: '100%',
                     }}
                 >
-                    <Image
-                        style={{
-                        flex: 1,
-                        resizeMode,
-                        }}
-                        source={{ uri : imageLink}}
-                    />
+                    {display}
                    
                 </View>
                 <View
